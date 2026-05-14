@@ -1,0 +1,155 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum JobType {
+  REMOTE
+  HYBRID
+  ONSITE
+}
+
+enum ApplicationStatus {
+  DRAFT
+  APPLIED
+  SCREEN
+  SHORTLIST
+  INTERVIEW
+  OFFER
+  REJECTED
+}
+
+enum InsightCategory {
+  MATCHING
+  ATS
+  OUTREACH
+  INTERVIEW
+}
+
+model UserProfile {
+  id           String           @id @default(cuid())
+  clerkUserId  String           @unique
+  email        String           @unique
+  firstName    String?
+  lastName     String?
+  headline     String?
+  createdAt    DateTime         @default(now())
+  updatedAt    DateTime         @updatedAt
+  resumes      Resume[]
+  resumeAnalyses ResumeAnalysis[]
+  jobMatches   JobMatch[]
+  applications JobApplication[]
+  insights     AiInsight[]
+}
+
+model Resume {
+  id           String      @id @default(cuid())
+  userId       String
+  name         String
+  version      String?
+  targetRole   String?
+  summary      String?
+  atsScore     Int         @default(0)
+  parsedSkills String[]    @default([])
+  fileName     String?
+  fileType     String?
+  fileSize     Int?
+  fileUrl      String?
+  rawText      String?     @db.Text
+  parsedData   Json?
+  extractedSkills String[] @default([])
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
+  user         UserProfile @relation(fields: [userId], references: [id], onDelete: Cascade)
+  analyses     ResumeAnalysis[]
+
+  @@index([userId, createdAt])
+}
+
+model ResumeAnalysis {
+  id                String      @id @default(cuid())
+  resumeId          String
+  userId            String
+  provider          String
+  model             String
+  promptVersion     String
+  executiveSummary  String      @db.Text
+  atsScore          Int
+  jobReadinessScore Int
+  strengths         String[]    @default([])
+  weaknesses        String[]    @default([])
+  missingSkills     String[]    @default([])
+  recommendations   String[]    @default([])
+  analysisData      Json?
+  createdAt         DateTime    @default(now())
+  updatedAt         DateTime    @updatedAt
+  resume            Resume      @relation(fields: [resumeId], references: [id], onDelete: Cascade)
+  user              UserProfile @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([resumeId, createdAt])
+  @@index([userId, createdAt])
+}
+
+model JobListing {
+  id           String           @id @default(cuid())
+  source       String?
+  externalId   String?          @unique
+  company      String
+  title        String
+  location     String
+  type         JobType
+  salaryRange  String?
+  description  String
+  keywords     String[]
+  postedAt     DateTime?
+  createdAt    DateTime         @default(now())
+  updatedAt    DateTime         @updatedAt
+  applications JobApplication[]
+  matches      JobMatch[]
+}
+
+model JobMatch {
+  id            String      @id @default(cuid())
+  userId        String
+  jobId         String
+  matchScore    Int
+  atsScore      Int
+  reason        String
+  missingSkills String[]
+  createdAt     DateTime    @default(now())
+  user          UserProfile @relation(fields: [userId], references: [id], onDelete: Cascade)
+  job           JobListing  @relation(fields: [jobId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, jobId])
+}
+
+model JobApplication {
+  id          String            @id @default(cuid())
+  userId      String
+  jobId       String
+  status      ApplicationStatus @default(DRAFT)
+  coverLetter String?
+  notes       String?
+  submittedAt DateTime?
+  createdAt   DateTime          @default(now())
+  updatedAt   DateTime          @updatedAt
+  user        UserProfile       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  job         JobListing        @relation(fields: [jobId], references: [id], onDelete: Cascade)
+
+  @@index([userId, status])
+}
+
+model AiInsight {
+  id        String          @id @default(cuid())
+  userId    String
+  category  InsightCategory
+  title     String
+  content   String
+  metadata  Json?
+  createdAt DateTime        @default(now())
+  user      UserProfile     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
