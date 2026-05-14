@@ -88,7 +88,11 @@ export async function uploadResumeForActor(input: {
 
     return serializeStoredResume(storedResume);
   } catch (error) {
-    await deleteLocalResumeFile(uploadedFile.fileUrl);
+    try {
+      await deleteLocalResumeFile(uploadedFile.fileUrl);
+    } catch (cleanupError) {
+      console.error("Failed to cleanup resume file after upload error:", cleanupError);
+    }
     throw mapUnknownResumeError(error, "DATABASE_FAILED", "Unable to save the parsed resume.");
   }
 }
@@ -181,6 +185,8 @@ export async function getLatestResumeForActor(
     },
     select: {
       id: true,
+      name: true,
+      summary: true,
       fileName: true,
       fileType: true,
       fileSize: true,
@@ -199,11 +205,10 @@ export async function getLatestResumeForActor(
 
   if (!resume) return null;
 
-  // Manual mapping to satisfy storedResumeSchema which expects rawText
   const serialized = serializeStoredResume({
     ...resume,
-    rawText: null, // Provide a placeholder for the serializer
-  } as any);
+    rawText: null,
+  });
 
   return serialized;
 }
@@ -250,7 +255,24 @@ async function readResumeFile(file: File) {
   return Buffer.from(arrayBuffer);
 }
 
-function serializeStoredResume(resume: Resume) {
+type ResumeSnapshot = Pick<
+  Resume,
+  | "id"
+  | "name"
+  | "summary"
+  | "fileName"
+  | "fileType"
+  | "fileSize"
+  | "fileUrl"
+  | "rawText"
+  | "parsedData"
+  | "extractedSkills"
+  | "parsedSkills"
+  | "createdAt"
+  | "updatedAt"
+>;
+
+function serializeStoredResume(resume: ResumeSnapshot) {
   const parsedResume = parseStoredResumeJson(resume.parsedData);
 
   return storedResumeSchema.parse({

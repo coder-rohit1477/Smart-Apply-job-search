@@ -1,3 +1,5 @@
+import "server-only";
+
 import type { ResumeProfile } from "@/lib/types";
 import { getLatestResumeForActor } from "@/services/resume-service";
 

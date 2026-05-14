@@ -1,3 +1,5 @@
+import "server-only";
+
 import { prisma } from "@/lib/prisma";
 import { analyzeAtsScore } from "../analyzers/ats-score";
 import { analyzeKeywords } from "../analyzers/keyword-analyzer";

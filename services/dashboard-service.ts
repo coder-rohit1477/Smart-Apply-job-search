@@ -1,3 +1,5 @@
+import "server-only";
+
 import { buildAiRecommendations } from "@/ai/application-assistant";
 import { getActivityFeed, getFeaturedJobs, getPipelineItems } from "@/jobs/job-repository";
 import type { DashboardSnapshot, LandingSnapshot } from "@/lib/types";
