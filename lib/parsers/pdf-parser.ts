@@ -12,13 +12,11 @@ export async function parsePdfBuffer(buffer: Buffer): Promise<string> {
   try {
     // We use a dynamic import for 'unpdf' to ensure it's only loaded on the server
     // during actual parsing operations, keeping the main bundle lightweight.
-    const { extractText, configureUnpdf } = await import("unpdf");
+    const { extractText, definePDFJSModule } = await import("unpdf");
 
     // Manually configure PDF.js if needed (especially for environments like Next.js RSC)
     try {
-      // @ts-ignore - unpdf types might not match legacy build exactly
-      const pdfjs = await import("pdfjs-dist/legacy/build/pdf.mjs");
-      await configureUnpdf({ pdfjs });
+      await definePDFJSModule(() => import("pdfjs-dist/legacy/build/pdf.mjs"));
       console.log("[PDF Parser] unpdf configured with legacy PDF.js build.");
     } catch (configError) {
       console.warn("[PDF Parser] Failed to manually configure unpdf, attempting default resolution:", configError);

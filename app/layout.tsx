@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { ClerkProvider } from "@clerk/nextjs";
-import { JetBrains_Mono, Manrope } from "next/font/google";
 import { Navbar } from "@/components/layout/navbar";
 import { ThemeProvider } from "@/components/theme/theme-provider";
 import { APP_DESCRIPTION, APP_NAME } from "@/lib/constants";
@@ -8,16 +7,6 @@ import { getAppEnv } from "@/lib/env";
 import "./globals.css";
 
 const appEnv = getAppEnv();
-
-const manrope = Manrope({
-  subsets: ["latin"],
-  variable: "--font-manrope",
-});
-
-const jetBrainsMono = JetBrains_Mono({
-  subsets: ["latin"],
-  variable: "--font-jetbrains-mono",
-});
 
 export const metadata: Metadata = {
   metadataBase: new URL(appEnv.NEXT_PUBLIC_APP_URL),
@@ -46,11 +35,7 @@ export default function RootLayout({
 }>) {
   return (
     <ClerkProvider>
-      <html
-        lang="en"
-        suppressHydrationWarning
-        className={`${manrope.variable} ${jetBrainsMono.variable}`}
-      >
+      <html lang="en" suppressHydrationWarning>
         <body className="min-h-screen bg-background text-foreground antialiased">
           <ThemeProvider
             attribute="class"

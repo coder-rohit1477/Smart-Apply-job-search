@@ -1,3 +1,4 @@
+@import url("https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Manrope:wght@300;400;500;600;700;800&display=swap");
 @import "tailwindcss";
 
 @custom-variant dark (&:is(.dark *));
@@ -28,6 +29,8 @@
   --chart-4: oklch(0.68 0.2 11.56);
   --chart-5: oklch(0.68 0.16 304.77);
   --radius: 1rem;
+  --font-manrope: "Manrope", "Segoe UI", system-ui, -apple-system, sans-serif;
+  --font-jetbrains-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
 }
 
 .dark {
@@ -105,7 +108,7 @@ body {
     radial-gradient(circle at right, color-mix(in srgb, var(--color-primary) 22%, transparent), transparent 34%),
     var(--color-background);
   color: var(--color-foreground);
-  font-family: var(--font-manrope), sans-serif;
+  font-family: var(--font-manrope);
 }
 
 ::selection {
