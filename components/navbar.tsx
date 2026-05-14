@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 type SessionUser = {
@@ -12,6 +13,7 @@ type SessionUser = {
 
 export default function Navbar() {
   const [user, setUser] = useState<SessionUser | null>(null);
+  const router = useRouter();
 
   useEffect(() => {
     fetch("/api/auth/me")
@@ -22,7 +24,8 @@ export default function Navbar() {
 
   async function logout() {
     await fetch("/api/auth/logout", { method: "POST" });
-    window.location.href = "/";
+    router.push("/");
+    router.refresh();
   }
 
   return (

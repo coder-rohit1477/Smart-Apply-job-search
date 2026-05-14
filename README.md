@@ -5,7 +5,7 @@ A full-stack AI-powered job search platform built with **Next.js**, **Tailwind C
 ## Features
 
 - Candidate and recruiter authentication with secure HTTP-only JWT cookies
-- Resume upload API (2MB max) with skill extraction
+- Resume upload API (TXT, 2MB max) with skill extraction
 - Job listings and recruiter job posting workflow
 - Application tracking for candidates
 - Recruiter dashboard analytics

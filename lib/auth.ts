@@ -1,7 +1,13 @@
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 
-const JWT_SECRET = process.env.JWT_SECRET || "dev-only-change-this-secret";
+function getJwtSecret() {
+  const secret = process.env.JWT_SECRET;
+  if (!secret) {
+    throw new Error("JWT_SECRET environment variable must be set.");
+  }
+  return secret;
+}
 
 export interface SessionToken {
   userId: string;
@@ -19,9 +25,9 @@ export async function comparePassword(password: string, hash: string) {
 }
 
 export function signToken(payload: SessionToken) {
-  return jwt.sign(payload, JWT_SECRET, { expiresIn: "7d" });
+  return jwt.sign(payload, getJwtSecret(), { expiresIn: "7d" });
 }
 
 export function verifyToken(token: string) {
-  return jwt.verify(token, JWT_SECRET) as SessionToken;
+  return jwt.verify(token, getJwtSecret()) as SessionToken;
 }

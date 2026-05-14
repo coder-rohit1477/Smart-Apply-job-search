@@ -73,11 +73,11 @@ export default function CandidateDashboardPage() {
 
       <article className="rounded-xl border border-gray-200 bg-white p-5 shadow-sm">
         <h2 className="text-lg font-semibold">Upload Resume</h2>
-        <p className="mt-1 text-sm text-gray-600">PDF/TXT supported via API parser (2MB max).</p>
+        <p className="mt-1 text-sm text-gray-600">TXT resume upload with AI skill extraction (2MB max).</p>
         <input
           className="mt-3"
           type="file"
-          accept=".txt,.pdf,.doc,.docx"
+          accept=".txt"
           onChange={(event) => {
             const file = event.target.files?.[0];
             if (file) {

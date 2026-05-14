@@ -1,8 +1,10 @@
 "use client";
 
 import { FormEvent, useState } from "react";
+import { useRouter } from "next/navigation";
 
 export default function LoginPage() {
+  const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -24,7 +26,7 @@ export default function LoginPage() {
     }
 
     const { user } = await response.json();
-    window.location.href = user.role === "recruiter" ? "/recruiter" : "/dashboard";
+    router.push(user.role === "recruiter" ? "/recruiter" : "/dashboard");
   }
 
   return (

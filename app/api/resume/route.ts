@@ -1,5 +1,6 @@
 import { randomUUID } from "node:crypto";
 import { mkdir, writeFile } from "node:fs/promises";
+import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { NextRequest, NextResponse } from "next/server";
 import { requireAuth } from "@/lib/api-auth";
@@ -44,10 +45,14 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: "File too large (max 2MB)" }, { status: 400 });
   }
 
+  if (!file.name.toLowerCase().endsWith(".txt")) {
+    return NextResponse.json({ error: "Only .txt resume uploads are currently supported" }, { status: 400 });
+  }
+
   const arrayBuffer = await file.arrayBuffer();
   const buffer = Buffer.from(arrayBuffer);
 
-  const uploadDir = "/tmp/smart-apply-uploads";
+  const uploadDir = join(tmpdir(), "smart-apply-uploads");
   await mkdir(uploadDir, { recursive: true });
   const storedName = `${randomUUID()}-${file.name.replace(/[^a-zA-Z0-9._-]/g, "_")}`;
   await writeFile(join(uploadDir, storedName), buffer);

@@ -1,8 +1,10 @@
 "use client";
 
 import { FormEvent, useState } from "react";
+import { useRouter } from "next/navigation";
 
 export default function RegisterPage() {
+  const router = useRouter();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -25,7 +27,7 @@ export default function RegisterPage() {
       return;
     }
 
-    window.location.href = role === "recruiter" ? "/recruiter" : "/dashboard";
+    router.push(role === "recruiter" ? "/recruiter" : "/dashboard");
   }
 
   return (
