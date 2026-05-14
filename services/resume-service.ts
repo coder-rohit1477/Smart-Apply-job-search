@@ -91,7 +91,7 @@ export async function uploadResumeForActor(input: {
     try {
       await deleteLocalResumeFile(uploadedFile.fileUrl);
     } catch (cleanupError) {
-      console.error("Failed to cleanup resume file after upload error:", cleanupError);
+      console.error("Failed to clean up resume file after upload error:", cleanupError);
     }
     throw mapUnknownResumeError(error, "DATABASE_FAILED", "Unable to save the parsed resume.");
   }
@@ -205,10 +205,7 @@ export async function getLatestResumeForActor(
 
   if (!resume) return null;
 
-  const serialized = serializeStoredResume({
-    ...resume,
-    rawText: null,
-  });
+  const serialized = serializeStoredResume(resume);
 
   return serialized;
 }
@@ -264,13 +261,14 @@ type ResumeSnapshot = Pick<
   | "fileType"
   | "fileSize"
   | "fileUrl"
-  | "rawText"
   | "parsedData"
   | "extractedSkills"
   | "parsedSkills"
   | "createdAt"
   | "updatedAt"
->;
+> & {
+  rawText?: string | null;
+};
 
 function serializeStoredResume(resume: ResumeSnapshot) {
   const parsedResume = parseStoredResumeJson(resume.parsedData);

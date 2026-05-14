@@ -30,6 +30,9 @@ export async function performFullResumeAnalysis(
 ) {
   const resume = await prisma.resume.findUnique({
     where: { id: resumeId },
+    select: {
+      rawText: true,
+    },
   });
 
   if (!resume || !resume.rawText) {
