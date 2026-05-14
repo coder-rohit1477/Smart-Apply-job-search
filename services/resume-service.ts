@@ -205,9 +205,7 @@ export async function getLatestResumeForActor(
 
   if (!resume) return null;
 
-  const serialized = serializeStoredResume(resume);
-
-  return serialized;
+  return serializeStoredResume(resume);
 }
 
 export function buildResumeErrorResponse(error: unknown) {

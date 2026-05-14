@@ -183,7 +183,7 @@ export interface FullResumeAnalysis {
 
 export interface AnalysisResponseSuccess {
   success: true;
-  analysis: ResumeAnalysis;
+  analysis: ResumeAnalysis; // Prisma ResumeAnalysis model (see prisma/schema.prisma)
 }
 
 export interface AnalysisResponseError {
