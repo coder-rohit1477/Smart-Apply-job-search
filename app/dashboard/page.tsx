@@ -22,22 +22,30 @@ export default function CandidateDashboardPage() {
   const [recommendations, setRecommendations] = useState<Recommendation[]>([]);
   const [uploadMessage, setUploadMessage] = useState("");
 
-  async function loadData() {
+  async function fetchDashboardData() {
     const [applicationRes, recommendationRes] = await Promise.all([
       fetch("/api/applications"),
       fetch("/api/recommendations"),
     ]);
-    const applicationData = await applicationRes.json();
-    const recommendationData = await recommendationRes.json();
-    setApplications(applicationData.applications || []);
-    setRecommendations(recommendationData.recommendations || []);
+    return {
+      applications: (await applicationRes.json()).applications || [],
+      recommendations: (await recommendationRes.json()).recommendations || [],
+    };
   }
 
   useEffect(() => {
-    const timer = setTimeout(() => {
-      void loadData();
-    }, 0);
-    return () => clearTimeout(timer);
+    let isMounted = true;
+    fetchDashboardData()
+      .then((data) => {
+        if (isMounted) {
+          setApplications(data.applications);
+          setRecommendations(data.recommendations);
+        }
+      })
+      .catch(() => undefined);
+    return () => {
+      isMounted = false;
+    };
   }, []);
 
   async function uploadResume(file: File) {
@@ -54,7 +62,9 @@ export default function CandidateDashboardPage() {
     }
 
     setUploadMessage("Resume uploaded. Recommendations refreshed.");
-    await loadData();
+    const dashboardData = await fetchDashboardData();
+    setApplications(dashboardData.applications);
+    setRecommendations(dashboardData.recommendations);
   }
 
   return (

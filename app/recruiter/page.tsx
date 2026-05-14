@@ -17,17 +17,23 @@ export default function RecruiterDashboardPage() {
   const [skills, setSkills] = useState("react,next.js,typescript");
   const [message, setMessage] = useState("");
 
-  async function loadDashboard() {
+  async function fetchRecruiterDashboard() {
     const response = await fetch("/api/recruiter/dashboard");
-    const data = await response.json();
-    setStats(data.stats || null);
+    return (await response.json()).stats || null;
   }
 
   useEffect(() => {
-    const timer = setTimeout(() => {
-      void loadDashboard();
-    }, 0);
-    return () => clearTimeout(timer);
+    let isMounted = true;
+    fetchRecruiterDashboard()
+      .then((dashboardStats) => {
+        if (isMounted) {
+          setStats(dashboardStats);
+        }
+      })
+      .catch(() => undefined);
+    return () => {
+      isMounted = false;
+    };
   }, []);
 
   async function createJob(event: FormEvent) {
@@ -59,7 +65,8 @@ export default function RecruiterDashboardPage() {
     setMessage("Job posted successfully.");
     setTitle("");
     setDescription("");
-    await loadDashboard();
+    const dashboardStats = await fetchRecruiterDashboard();
+    setStats(dashboardStats);
   }
 
   return (

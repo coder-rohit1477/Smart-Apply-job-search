@@ -16,17 +16,19 @@ export default function JobsPage() {
   const [jobs, setJobs] = useState<Job[]>([]);
   const [message, setMessage] = useState("");
 
-  async function loadJobs() {
-    const response = await fetch("/api/jobs");
-    const data = await response.json();
-    setJobs(data.jobs || []);
-  }
-
   useEffect(() => {
-    const timer = setTimeout(() => {
-      void loadJobs();
-    }, 0);
-    return () => clearTimeout(timer);
+    let isMounted = true;
+    fetch("/api/jobs")
+      .then((response) => response.json())
+      .then((data) => {
+        if (isMounted) {
+          setJobs(data.jobs || []);
+        }
+      })
+      .catch(() => undefined);
+    return () => {
+      isMounted = false;
+    };
   }, []);
 
   async function apply(jobId: string) {
