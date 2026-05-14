@@ -1,5 +1,6 @@
 import "server-only";
 
+import type { Prisma } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
 import { analyzeAtsScore } from "../analyzers/ats-score";
 import { analyzeKeywords } from "../analyzers/keyword-analyzer";
@@ -90,7 +91,7 @@ export async function performFullResumeAnalysis(
       weaknesses: analysisData.weaknesses,
       missingSkills: analysisData.technicalGaps,
       recommendations: analysisData.recommendations,
-      analysisData: analysisData as any,
+      analysisData: analysisData as unknown as Prisma.InputJsonValue,
     },
   });
 

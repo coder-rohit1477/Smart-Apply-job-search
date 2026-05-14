@@ -3,12 +3,12 @@ import "server-only";
 /**
  * PDF Parsing Service using 'unpdf'.
  * 'unpdf' provides a stable, cross-runtime wrapper around pdfjs-dist,
- * solving the common 'Object.defineProperty' and environment detection 
+ * solving the common 'Object.defineProperty' and environment detection
  * issues encountered in Next.js 15 App Router and RSC.
  */
 export async function parsePdfBuffer(buffer: Buffer): Promise<string> {
   console.log("[PDF Parser] Starting extraction. Buffer length:", buffer.length);
-  
+
   try {
     // We use a dynamic import for 'unpdf' to ensure it's only loaded on the server
     // during actual parsing operations, keeping the main bundle lightweight.

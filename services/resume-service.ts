@@ -91,7 +91,10 @@ export async function uploadResumeForActor(input: {
     try {
       await deleteLocalResumeFile(uploadedFile.fileUrl);
     } catch (cleanupError) {
-      console.error("Failed to clean up resume file after upload error:", cleanupError);
+      console.error(
+        `Failed to clean up resume file after upload error (${uploadedFile.fileUrl}):`,
+        cleanupError,
+      );
     }
     throw mapUnknownResumeError(error, "DATABASE_FAILED", "Unable to save the parsed resume.");
   }

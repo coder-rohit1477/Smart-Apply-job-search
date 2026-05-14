@@ -21,6 +21,7 @@ interface ResumeUploadProps {
 
 type UploadStage = "uploading" | "parsing" | "saving";
 type ViewTab = "preview" | "analysis" | "matching";
+const STAGE_TRANSITION_INTERVAL_MS = 1000;
 
 export function ResumeUpload({ initialResume }: ResumeUploadProps) {
   const [resume, setResume] = useState<StoredResume | null>(initialResume);
@@ -41,7 +42,7 @@ export function ResumeUpload({ initialResume }: ResumeUploadProps) {
     const timer = window.setInterval(() => {
       index = Math.min(index + 1, stages.length - 1);
       setStage(stages[index]);
-    }, 1000);
+    }, STAGE_TRANSITION_INTERVAL_MS);
 
     return () => window.clearInterval(timer);
   }, [isUploading]);
