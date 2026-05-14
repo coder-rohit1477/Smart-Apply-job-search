@@ -3,13 +3,12 @@ import { ClerkProvider } from "@clerk/nextjs";
 import { Navbar } from "@/components/layout/navbar";
 import { ThemeProvider } from "@/components/theme/theme-provider";
 import { APP_DESCRIPTION, APP_NAME } from "@/lib/constants";
-import { getAppEnv } from "@/lib/env";
 import "./globals.css";
 
-const appEnv = getAppEnv();
+const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000";
 
 export const metadata: Metadata = {
-  metadataBase: new URL(appEnv.NEXT_PUBLIC_APP_URL),
+  metadataBase: new URL(appUrl),
   title: {
     default: `${APP_NAME} | AI Job Platform`,
     template: `%s | ${APP_NAME}`,

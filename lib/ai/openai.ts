@@ -1,10 +1,20 @@
 import OpenAI from "openai";
 import { getServerEnv } from "@/lib/env";
 
-const env = getServerEnv();
+let cachedClient: OpenAI | null = null;
 
-export const openai = new OpenAI({
-  apiKey: env.OPENAI_API_KEY,
-});
+export function getOpenAIClient() {
+  if (!cachedClient) {
+    const env = getServerEnv();
+    cachedClient = new OpenAI({
+      apiKey: env.OPENAI_API_KEY,
+    });
+  }
 
-export const DEFAULT_MODEL = env.OPENAI_RESUME_ANALYSIS_MODEL || "gpt-4o-mini";
+  return cachedClient;
+}
+
+export function getDefaultModel() {
+  const env = getServerEnv();
+  return env.OPENAI_RESUME_ANALYSIS_MODEL || "gpt-4o-mini";
+}

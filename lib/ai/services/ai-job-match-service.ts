@@ -1,4 +1,4 @@
-import { openai, DEFAULT_MODEL } from "../openai";
+import { getDefaultModel, getOpenAIClient } from "../openai";
 
 export interface JobMatchResult {
   matchScore: number;
@@ -39,8 +39,11 @@ Return ONLY a JSON object:
 }
 `;
 
+  const openai = getOpenAIClient();
+  const model = getDefaultModel();
+
   const response = await openai.chat.completions.create({
-    model: DEFAULT_MODEL,
+    model,
     messages: [{ role: "user", content: prompt }],
     response_format: { type: "json_object" },
   });

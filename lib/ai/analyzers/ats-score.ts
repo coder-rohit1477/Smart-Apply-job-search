@@ -1,4 +1,4 @@
-import { openai, DEFAULT_MODEL } from "../openai";
+import { getDefaultModel, getOpenAIClient } from "../openai";
 import { ATS_ANALYSIS_PROMPT } from "../prompts/ats-analysis";
 
 export interface AtsAnalysisResult {
@@ -21,8 +21,11 @@ export async function analyzeAtsScore(
     .replace("{resumeText}", resumeText)
     .replace("{jobDescriptionInstruction}", jobDescriptionInstruction);
 
+  const openai = getOpenAIClient();
+  const model = getDefaultModel();
+
   const response = await openai.chat.completions.create({
-    model: DEFAULT_MODEL,
+    model,
     messages: [{ role: "user", content: prompt }],
     response_format: { type: "json_object" },
   });

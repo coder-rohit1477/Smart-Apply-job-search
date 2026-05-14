@@ -1,4 +1,4 @@
-import { openai, DEFAULT_MODEL } from "../openai";
+import { getDefaultModel, getOpenAIClient } from "../openai";
 import { SKILL_GAP_PROMPT } from "../prompts/skill-gap";
 
 export interface SkillGapResult {
@@ -17,8 +17,11 @@ export async function analyzeSkillGap(
     .replace("{resumeText}", resumeText)
     .replace("{jobDescription}", jobDescription);
 
+  const openai = getOpenAIClient();
+  const model = getDefaultModel();
+
   const response = await openai.chat.completions.create({
-    model: DEFAULT_MODEL,
+    model,
     messages: [{ role: "user", content: prompt }],
     response_format: { type: "json_object" },
   });

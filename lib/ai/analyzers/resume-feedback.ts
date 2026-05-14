@@ -1,4 +1,4 @@
-import { openai, DEFAULT_MODEL } from "../openai";
+import { getDefaultModel, getOpenAIClient } from "../openai";
 import { RESUME_FEEDBACK_PROMPT } from "../prompts/resume-feedback";
 
 export interface ResumeFeedbackResult {
@@ -17,8 +17,11 @@ export async function getResumeFeedback(
 ): Promise<ResumeFeedbackResult> {
   const prompt = RESUME_FEEDBACK_PROMPT.replace("{resumeText}", resumeText);
 
+  const openai = getOpenAIClient();
+  const model = getDefaultModel();
+
   const response = await openai.chat.completions.create({
-    model: DEFAULT_MODEL,
+    model,
     messages: [{ role: "user", content: prompt }],
     response_format: { type: "json_object" },
   });

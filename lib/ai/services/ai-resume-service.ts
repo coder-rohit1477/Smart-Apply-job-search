@@ -3,7 +3,7 @@ import { analyzeAtsScore } from "../analyzers/ats-score";
 import { analyzeKeywords } from "../analyzers/keyword-analyzer";
 import { getResumeFeedback } from "../analyzers/resume-feedback";
 import { analyzeSkillGap } from "../analyzers/skill-gap";
-import { DEFAULT_MODEL } from "../openai";
+import { getDefaultModel } from "../openai";
 
 export interface FullResumeAnalysis {
   atsScore: number;
@@ -50,6 +50,7 @@ export async function performFullResumeAnalysis(
     ]);
   }
 
+  const model = getDefaultModel();
   const analysisData: FullResumeAnalysis = {
     atsScore: atsResult.atsScore,
     strengths: atsResult.strengths,
@@ -75,7 +76,7 @@ export async function performFullResumeAnalysis(
       resumeId,
       userId,
       provider: "openai",
-      model: DEFAULT_MODEL,
+      model,
       promptVersion: "1.0",
       executiveSummary: analysisData.executiveSummary,
       atsScore: analysisData.atsScore,
