@@ -116,7 +116,7 @@ export default function RecruiterDashboardPage() {
             required
             value={description}
             onChange={(event) => setDescription(event.target.value)}
-            className="md:col-span-2 rounded-md border border-gray-300 px-3 py-2"
+            className="rounded-md border border-gray-300 px-3 py-2 md:col-span-2"
             rows={4}
             placeholder="Role description"
           />
