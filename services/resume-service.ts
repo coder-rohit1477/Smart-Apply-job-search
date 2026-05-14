@@ -317,12 +317,15 @@ function mapUnknownResumeError(
   }
 
   const errorMessage = error instanceof Error ? error.message : message;
-  const finalCode = error instanceof Error && error.message.includes("supported") ? "INVALID_FILE_TYPE" : code;
+  const finalCode: ResumeErrorCode =
+    error instanceof Error && error.message.includes("supported")
+      ? "INVALID_FILE_TYPE"
+      : code;
 
   return new ResumeServiceError(
-    finalCode as ResumeErrorCode, 
-    errorMessage, 
-    inferStatus(finalCode as ResumeErrorCode), 
+    finalCode,
+    errorMessage,
+    inferStatus(finalCode),
     error instanceof Error ? [error.message] : []
   );
 }

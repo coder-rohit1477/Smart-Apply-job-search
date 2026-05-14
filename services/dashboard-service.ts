@@ -8,10 +8,13 @@ export async function getLandingSnapshot(): Promise<LandingSnapshot> {
   const profile = await getResumeProfile();
   const jobs = await getFeaturedJobs();
   const previewMatches = buildJobMatches(profile, jobs).slice(0, 3);
-  const averageAts = Math.round(
-    previewMatches.reduce((total, match) => total + match.atsScore, 0) /
-      previewMatches.length,
-  );
+  const averageAts =
+    previewMatches.length > 0
+      ? Math.round(
+          previewMatches.reduce((total, match) => total + match.atsScore, 0) /
+            previewMatches.length,
+        )
+      : 0;
 
   return {
     stats: [
@@ -68,12 +71,20 @@ export async function getDashboardSnapshot(
   const activities = await getActivityFeed(userId);
   const recommendations = buildAiRecommendations(profile, matches, pipeline);
 
-  const averageFit = Math.round(
-    matches.reduce((total, match) => total + match.matchScore, 0) / matches.length,
-  );
-  const averageAts = Math.round(
-    matches.reduce((total, match) => total + match.atsScore, 0) / matches.length,
-  );
+  const averageFit =
+    matches.length > 0
+      ? Math.round(
+          matches.reduce((total, match) => total + match.matchScore, 0) /
+            matches.length,
+        )
+      : 0;
+  const averageAts =
+    matches.length > 0
+      ? Math.round(
+          matches.reduce((total, match) => total + match.atsScore, 0) /
+            matches.length,
+        )
+      : 0;
 
   return {
     metrics: [

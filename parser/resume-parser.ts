@@ -28,9 +28,9 @@ export async function getResumeProfile(userId?: string): Promise<ResumeProfile> 
     return defaultResumeProfile;
   }
 
-  const strengths =
-    latestResume.parsedData.skills.slice(0, 3).map((skill) => skill.name) ||
-    defaultResumeProfile.strengths;
+  const strengths = latestResume.parsedData.skills
+    .slice(0, 3)
+    .map((skill) => skill.name);
   const yearsOfExperience =
     latestResume.parsedData.estimatedYearsOfExperience ??
     Math.min(Math.max(latestResume.parsedData.experience.length, 1), 15);

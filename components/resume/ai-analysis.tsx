@@ -1,17 +1,18 @@
 "use client";
 
 import { useState } from "react";
-import { 
-  AlertCircle, 
-  BrainCircuit, 
-  CheckCircle2, 
-  ChevronDown, 
-  ChevronUp, 
-  FileSearch, 
-  Lightbulb, 
-  Target, 
-  TrendingUp 
+import {
+  AlertCircle,
+  BrainCircuit,
+  CheckCircle2,
+  ChevronDown,
+  ChevronUp,
+  FileSearch,
+  Lightbulb,
+  Target,
+  TrendingUp,
 } from "lucide-react";
+import type { LucideIcon } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -231,7 +232,7 @@ function ScoreCard({
 }: { 
   title: string; 
   score: number; 
-  icon: any;
+  icon: LucideIcon;
   description: string;
 }) {
   const getColor = (s: number) => {
@@ -275,7 +276,7 @@ function ListCard({
 }: { 
   title: string; 
   items: string[]; 
-  icon: any;
+  icon: LucideIcon;
   itemClass: string;
   iconClass: string;
 }) {

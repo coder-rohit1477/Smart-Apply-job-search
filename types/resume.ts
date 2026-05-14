@@ -1,4 +1,5 @@
 import { z } from "zod";
+import type { ResumeAnalysis } from "@prisma/client";
 
 export const resumeErrorCodeSchema = z.enum([
   "UNAUTHORIZED",
@@ -182,7 +183,7 @@ export interface FullResumeAnalysis {
 
 export interface AnalysisResponseSuccess {
   success: true;
-  analysis: any; // Using any for the raw prisma model but the UI will use FullResumeAnalysis from analysisData
+  analysis: ResumeAnalysis;
 }
 
 export interface AnalysisResponseError {

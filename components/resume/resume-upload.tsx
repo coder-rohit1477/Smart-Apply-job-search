@@ -1,7 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { CheckCircle2 } from "lucide-react";
+import { BrainCircuit, CheckCircle2, FileText, Search } from "lucide-react";
+import type { LucideIcon } from "lucide-react";
 import { AiAnalysis } from "@/components/resume/ai-analysis";
 import { JobMatcher } from "@/components/resume/job-matcher";
 import { ParsedResumePreview } from "@/components/resume/parsed-resume-preview";
@@ -12,7 +13,6 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { uploadResponseSchema, deleteResponseSchema } from "@/types/resume";
 import type { ResumeApiError, StoredResume } from "@/types/resume";
-import { BrainCircuit, FileText, Search } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 interface ResumeUploadProps {
@@ -236,7 +236,7 @@ function TabButton({
 }: { 
   active: boolean; 
   onClick: () => void; 
-  icon: any; 
+  icon: LucideIcon; 
   label: string;
 }) {
   return (
